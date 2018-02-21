@@ -58,8 +58,8 @@ PersistentMinimongo2 = function (collection, dbname, afterInitialisationCallback
         added: function (doc) {
 
             // Check if the localstorage is to big and reduce the current collection by 50 items
-            if(self.store.driver() === 'localStorageWrapper')
-                self.capCollection();
+            // if(self.store.driver() === 'localStorageWrapper')
+            //     self.capCollection();
 
 
             // add document id to tracking list and store
