@@ -154,9 +154,9 @@ PersistentMinimongo2.prototype = {
 
                                     if(foundDoc) {
                                         delete doc._id;
-                                        self.col.update({_id: id}, {$set: doc});
+                                        self.col._collection.update({_id: id}, {$set: doc});
                                     } else {
-                                        id = self.col.insert(doc);
+                                        id = self.col._collection.insert(doc);
                                     }
 
                                     newList.push(id);
