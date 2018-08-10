@@ -1,3 +1,4 @@
+
 /**
 Packages
 
@@ -249,6 +250,18 @@ PersistentMinimongo2.prototype = {
                 _this.col.remove(item._id);
             });
         }
+    },
+
+    deleteDatabase: function(){
+      localforage.dropInstance({
+        name: "persistent-minimongo2-ice",
+        storeName: "minimongo"
+      }).then(function() {
+        return console.log('Dropped database');
+      }).catch(function(err) {
+        return console.log(err);
+      });
+
     }
 };
 
