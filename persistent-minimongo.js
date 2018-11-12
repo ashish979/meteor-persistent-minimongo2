@@ -81,7 +81,7 @@ PersistentMinimongo2 = function (collection, dbname, afterInitialisationCallback
         },
 
         removed: function (doc) {
-            
+
             // if not in list, nothing to do
             if(!_.contains(self.list, doc._id))
                 return;
@@ -117,6 +117,28 @@ PersistentMinimongo2 = function (collection, dbname, afterInitialisationCallback
     });
 };
 
+PersistentMinimongo2.localforage = localforage
+
+PersistentMinimongo2.deleteDatabase = function (dbname, successCallback, errorCallback){
+  dbFullName = 'persistent-minimongo2-' + (dbname || 'db')
+  localforage.dropInstance({
+    name: dbFullName,
+    storeName: "minimongo"
+  }).then(function() {
+    if (successCallback) {
+      return successCallback();
+    } else {
+      return console.log('Dropped database');
+    }
+  }).catch(function(err) {
+    if (errorCallback) {
+      return errorCallback(err);
+    } else {
+      return console.log(err);
+    }
+  });
+}
+
 PersistentMinimongo2.prototype = {
     constructor: PersistentMinimongo2,
     _getStats: function () {
@@ -130,7 +152,7 @@ PersistentMinimongo2.prototype = {
     },
     /**
     Refresh the local storage
-    
+
     @method refresh
     @return {String}
     */
@@ -176,7 +198,7 @@ PersistentMinimongo2.prototype = {
 
                             // if not initializing, check for deletes
                             if(! init) {
-                            
+
                                 self.col.find({}).forEach(function (doc) {
                                     if(! _.contains(self.list, doc._id))
                                         self.col.remove({ _id: doc._id });
@@ -211,7 +233,7 @@ PersistentMinimongo2.prototype = {
     },
     /**
     Gets the current localstorage size in MB
-    
+
     @method localStorageSize
     @return {String} total localstorage size in MB
     */
@@ -236,7 +258,7 @@ PersistentMinimongo2.prototype = {
     },
     /**
     Check if the localstorage is to big and reduce the current collection by 50 items
-    
+
     @method localStorageSize
     @return {String}
     */
@@ -251,18 +273,6 @@ PersistentMinimongo2.prototype = {
             });
         }
     },
-
-    deleteDatabase: function(){
-      localforage.dropInstance({
-        name: "persistent-minimongo2-ice",
-        storeName: "minimongo"
-      }).then(function() {
-        return console.log('Dropped database');
-      }).catch(function(err) {
-        return console.log(err);
-      });
-
-    }
 };
 
 var persisters = [];
